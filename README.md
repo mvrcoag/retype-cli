@@ -22,6 +22,7 @@ ReType is a powerful command-line tool that makes refactoring TypeScript project
 - [Feature Deep Dive: Rename](#feature-deep-dive-rename)
 - [Architecture](#architecture)
 - [Contributing](#contributing)
+- [Publishing](#publishing)
 - [License](#license)
 
 ---
@@ -85,6 +86,7 @@ retype unused
 | `retype extract <name> [path]` | `e` | Extract an entity to a new file |
 | `retype references <name>` | `refs` | Find all references to an entity |
 | `retype unused` | `u` | Find unused entities |
+| `retype fix-imports` | `fi` | Find and fix missing imports |
 
 ### Global Options
 
@@ -140,6 +142,15 @@ Detect dead code - entities that are defined but never used.
 retype unused
 retype unused -k function         # Only unused functions
 retype unused --list              # Simple list output
+```
+
+### Fix Imports
+Find and fix missing imports across your codebase.
+
+```bash
+retype fix-imports                # Interactive mode
+retype fi --list                  # Just show errors, don't fix
+retype fi --auto                  # Auto-fix single-candidate imports
 ```
 
 ---
@@ -622,15 +633,73 @@ npm run lint     # Run ESLint
 - Provide TypeScript/Node.js version info
 - Attach relevant code snippets or error messages
 
-### Publishing to npm
+---
 
-For maintainers, to publish a new version:
+## Publishing
+
+### CI/CD Pipeline
+
+This project uses GitHub Actions for continuous integration and automatic publishing:
+
+- **CI Workflow**: Runs on every push and PR to `main`, testing against Node.js 18, 20, and 22
+- **Publish Workflow**: Automatically publishes to npm when the version in `package.json` changes
+
+### Initial Setup (Maintainers)
+
+#### 1. First Manual Publish
+
+Before setting up automation, publish the first version manually:
 
 ```bash
-# Update version in package.json
-npm version patch  # or minor, major
+npm login
+npm publish --access public
+```
 
-# Build and publish
+#### 2. Create npm Access Token
+
+1. Go to https://www.npmjs.com/settings/YOUR_USERNAME/tokens
+2. Click **"Generate New Token"** → **"Granular Access Token"**
+3. Configure:
+   - **Token name**: `GitHub Actions - retype-cli`
+   - **Expiration**: No expiration (or set reminder to rotate)
+   - **Packages and scopes**: Read and write
+   - **Select packages**: Choose `retype-cli`
+   - **Advanced** → Uncheck "Require two-factor authentication" (for CI/CD)
+4. Click **"Generate token"** and copy it
+
+#### 3. Add Token to GitHub Secrets
+
+1. Go to your GitHub repo → **Settings** → **Secrets and variables** → **Actions**
+2. Click **"New repository secret"**
+3. Name: `NPM_TOKEN`
+4. Value: (paste your npm token)
+5. Click **"Add secret"**
+
+### Releasing New Versions
+
+After the initial setup, releasing is simple:
+
+```bash
+# Update version (automatically commits and creates a git tag)
+npm version patch   # 1.1.0 → 1.1.1 (bug fixes)
+npm version minor   # 1.1.0 → 1.2.0 (new features)
+npm version major   # 1.1.0 → 2.0.0 (breaking changes)
+
+# Push to trigger automatic publish
+git push && git push --tags
+```
+
+The workflow will:
+1. Detect the version change
+2. Build and publish to npm
+3. Create a GitHub Release with auto-generated release notes
+
+### Manual Publishing
+
+If needed, you can still publish manually:
+
+```bash
+npm run build
 npm publish
 ```
 
