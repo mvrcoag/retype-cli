@@ -1,6 +1,6 @@
 {
   "name": "retype-cli",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "The TypeScript Refactoring CLI",
   "author": "mvrcoag",
   "license": "MIT",
