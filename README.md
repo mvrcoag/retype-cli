@@ -1,13 +1,10 @@
 # ReType
 
-```
-    ____       ______
-   / __ \___  /_  __/_  ______  ___
-  / /_/ / _ \  / / / / / / __ \/ _ \
- / _, _/  __/ / / / /_/ / /_/ /  __/
-/_/ |_|\___/ /_/  \__, / .___/\___/
-                 /____/_/
-```
+<div align="center">
+  <img src="./assets/logo.png" alt="retype-cli logo" width="600"/>
+  <br>
+  <br>
+</div>
 
 **The TypeScript Refactoring CLI**
 
