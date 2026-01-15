@@ -1,5 +1,5 @@
 export const APP_NAME = "ReType";
-export const APP_VERSION = "1.0.0";
+export const APP_VERSION = "1.1.0";
 export const APP_AUTHOR = "mvrcoag";
 export const APP_DESCRIPTION = `The TypeScript Refactoring CLI - @${APP_AUTHOR}`;
 

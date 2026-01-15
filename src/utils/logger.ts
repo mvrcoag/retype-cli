@@ -5,6 +5,7 @@ import {
   COLORS,
   ICONS,
   APP_NAME,
+  APP_VERSION,
   APP_DESCRIPTION,
 } from "../constants/index.js";
 
@@ -70,6 +71,8 @@ class Logger {
   banner(): void {
     const banner = boxen(
       chalk.hex(COLORS.primary).bold(APP_NAME) +
+        " " +
+        chalk.hex(COLORS.secondary)(`v${APP_VERSION}`) +
         "\n" +
         chalk.hex(COLORS.muted)(APP_DESCRIPTION),
       {

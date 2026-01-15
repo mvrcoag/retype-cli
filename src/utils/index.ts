@@ -18,3 +18,5 @@ export {
   isExitError,
 } from "./prompts.js";
 export type { SelectChoice, SelectOptions, InputOptions, ConfirmOptions } from "./prompts.js";
+export { pathInput } from "./path-input.js";
+export type { PathInputOptions } from "./path-input.js";

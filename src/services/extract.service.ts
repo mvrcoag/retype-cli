@@ -61,10 +61,8 @@ export class ExtractService {
     // Remove entity from source file
     this.removeEntityFromSource(node);
 
-    // Add import in source file if the entity was exported
-    if (entity.isExported) {
-      this.addImportToSource(sourceFile, entity.name, absoluteTargetPath);
-    }
+    // Add import in source file (entity is always exported in target)
+    this.addImportToSource(sourceFile, entity.name, absoluteTargetPath);
 
     // Save all changes
     project.saveAll();
@@ -85,26 +83,26 @@ export class ExtractService {
         // Check if statement has multiple declarations
         const declarations = statement.getDeclarations();
         if (declarations.length === 1) {
-          return statement.getFullText().trim();
+          let text = statement.getFullText().trim();
+          // Always ensure export keyword for extracted entities
+          if (!text.startsWith("export ")) {
+            text = "export " + text;
+          }
+          return text;
         } else {
-          // Extract just this declaration
+          // Extract just this declaration - always export
           const keyword = statement.getDeclarationKind();
-          const isExported = statement.isExported();
-          const prefix = isExported ? "export " : "";
-          return `${prefix}${keyword} ${node.getFullText().trim()};`;
+          return `export ${keyword} ${node.getFullText().trim()};`;
         }
       }
     }
 
-    // For other entities, get the full text with export keyword if needed
+    // For other entities, get the full text and always ensure export
     let text = node.getFullText().trim();
 
-    // Ensure export keyword if the entity was exported
-    const exportableNode = node as FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumDeclaration;
-    if (typeof exportableNode.isExported === "function" && exportableNode.isExported()) {
-      if (!text.startsWith("export ")) {
-        text = "export " + text;
-      }
+    // Always ensure export keyword for extracted entities (so they can be imported)
+    if (!text.startsWith("export ")) {
+      text = "export " + text;
     }
 
     return text;

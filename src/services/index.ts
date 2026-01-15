@@ -7,3 +7,8 @@ export {
   ReferencesService,
 } from "./references.service.js";
 export type { FileReference, EntityReference } from "./references.service.js";
+export {
+  importsService,
+  ImportsService,
+} from "./imports.service.js";
+export type { ImportError, FixableImport, UnfixableImport, ImportAnalysis } from "./imports.service.js";
